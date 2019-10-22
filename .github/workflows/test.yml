@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - master
-    pull_request:
+  pull_request:
 
 jobs:
   test:
@@ -21,12 +21,14 @@ jobs:
       - name: Set Node.js 10.x
         uses: actions/setup-node@master
         with:
-          version: 10.x
+          node-version: 10.x
 
       - name: npm install
         run: npm install
 
       - name: npm lint
+        # check style only once
+        if: matrix.operating-system == 'ubuntu-latest'
         run: npm run format-check
 
       - name: npm test
