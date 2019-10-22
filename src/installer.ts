@@ -140,9 +140,15 @@ async function fetchVersions(
   includePreReleases: boolean,
   repoToken: string
 ): Promise<string[]> {
-  let rest: restm.RestClient = new restm.RestClient("setup-protoc", "", [], {
-    headers: { Authorization: "Bearer " + repoToken }
-  });
+  let rest: restm.RestClient;
+  if (repoToken != "") {
+    rest = new restm.RestClient("setup-protoc", "", [], {
+      headers: { Authorization: "Bearer " + repoToken }
+    });
+  } else {
+    rest = new restm.RestClient("setup-protoc");
+  }
+
   let tags: IProtocRelease[] =
     (await rest.get<IProtocRelease[]>(
       "https://api.github.com/repos/protocolbuffers/protobuf/releases"
