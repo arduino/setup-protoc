@@ -41,6 +41,7 @@ export async function getProtoc(version: string, includePreReleases: boolean) {
   if (targetVersion) {
     version = targetVersion;
   }
+  core.info("Getting protoc version: " + version)
 
   // look if the binary is cached
   let toolPath: string;
