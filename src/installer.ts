@@ -88,6 +88,8 @@ async function downloadRelease(version: string): Promise<string> {
     version,
     fileName
   );
+  core.warning("Downloading archive: " + downloadUrl);
+
   let downloadPath: string | null = null;
   try {
     downloadPath = await tc.downloadTool(downloadUrl);
