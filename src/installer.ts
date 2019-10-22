@@ -35,13 +35,21 @@ interface IProtocRelease {
   prerelease: boolean;
 }
 
-export async function getProtoc(version: string, includePreReleases: boolean) {
+export async function getProtoc(
+  version: string,
+  includePreReleases: boolean,
+  repoToken: string
+) {
   // resolve the version number
-  const targetVersion = await computeVersion(version, includePreReleases);
+  const targetVersion = await computeVersion(
+    version,
+    includePreReleases,
+    repoToken
+  );
   if (targetVersion) {
     version = targetVersion;
   }
-  core.info("Getting protoc version: " + version)
+  process.stdout.write("Getting protoc version: " + version + os.EOL);
 
   // look if the binary is cached
   let toolPath: string;
@@ -50,7 +58,7 @@ export async function getProtoc(version: string, includePreReleases: boolean) {
   // if not: download, extract and cache
   if (!toolPath) {
     toolPath = await downloadRelease(version);
-    core.info("Protoc cached under " + toolPath);
+    process.stdout.write("Protoc cached under " + toolPath + os.EOL);
   }
 
   // add the bin folder to the PATH
@@ -89,7 +97,7 @@ async function downloadRelease(version: string): Promise<string> {
     version,
     fileName
   );
-  core.info("Downloading archive: " + downloadUrl);
+  process.stdout.write("Downloading archive: " + downloadUrl + os.EOL);
 
   let downloadPath: string | null = null;
   try {
@@ -128,8 +136,13 @@ function getFileName(version: string): string {
 }
 
 // Retrieve a list of versions scraping tags from the Github API
-async function fetchVersions(includePreReleases: boolean): Promise<string[]> {
-  let rest: restm.RestClient = new restm.RestClient("setup-protoc");
+async function fetchVersions(
+  includePreReleases: boolean,
+  repoToken: string
+): Promise<string[]> {
+  let rest: restm.RestClient = new restm.RestClient("setup-protoc", "", [], {
+    headers: { Authorization: "Bearer " + repoToken }
+  });
   let tags: IProtocRelease[] =
     (await rest.get<IProtocRelease[]>(
       "https://api.github.com/repos/protocolbuffers/protobuf/releases"
@@ -144,7 +157,8 @@ async function fetchVersions(includePreReleases: boolean): Promise<string[]> {
 // Compute an actual version starting from the `version` configuration param.
 async function computeVersion(
   version: string,
-  includePreReleases: boolean
+  includePreReleases: boolean,
+  repoToken: string
 ): Promise<string> {
   // strip leading `v` char (will be re-added later)
   if (version.startsWith("v")) {
@@ -156,7 +170,7 @@ async function computeVersion(
     version = version.slice(0, version.length - 2);
   }
 
-  const allVersions = await fetchVersions(includePreReleases);
+  const allVersions = await fetchVersions(includePreReleases, repoToken);
   const validVersions = allVersions.filter(v => semver.valid(v));
   const possibleVersions = validVersions.filter(v => v.startsWith(version));
 
