@@ -33,7 +33,7 @@ jobs:
         run: npm test
 
       - name: foo
-        uses: arduino/setup-protoc
+        uses: arduino/setup-protoc@massi/test
 
       - name: bar
         run: protoc --version
