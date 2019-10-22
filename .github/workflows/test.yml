@@ -18,19 +18,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
 
-      - name: Set Node.js 10.x
-        uses: actions/setup-node@master
-        with:
-          version: 10.x
+      # - name: Set Node.js 10.x
+      #   uses: actions/setup-node@master
+      #   with:
+      #     version: 10.x
 
-      - name: npm install
-        run: npm install
+      # - name: npm install
+      #   run: npm install
 
-      - name: npm lint
-        run: npm run format-check
+      # - name: npm lint
+      #   run: npm run format-check
 
-      - name: npm test
-        run: npm test
+      # - name: npm test
+      #   run: npm test
 
       - name: foo
         uses: arduino/setup-protoc@massi/test
