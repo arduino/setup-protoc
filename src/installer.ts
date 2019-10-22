@@ -49,7 +49,7 @@ export async function getProtoc(version: string, includePreReleases: boolean) {
   // if not: download, extract and cache
   if (!toolPath) {
     toolPath = await downloadRelease(version);
-    core.debug("Protoc cached under " + toolPath);
+    core.info("Protoc cached under " + toolPath);
   }
 
   // add the bin folder to the PATH
@@ -88,7 +88,7 @@ async function downloadRelease(version: string): Promise<string> {
     version,
     fileName
   );
-  core.warning("Downloading archive: " + downloadUrl);
+  core.info("Downloading archive: " + downloadUrl);
 
   let downloadPath: string | null = null;
   try {
