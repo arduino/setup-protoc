@@ -32,4 +32,6 @@ jobs:
         run: npm run format-check
 
       - name: npm test
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm test
