@@ -8,6 +8,9 @@ inputs:
   include-pre-releases:
     description: 'Include github pre-releases in latest version calculation'
     default: 'false'
+  repo-token:
+    description: 'GitHub repo token to use to avoid rate limiter'
+    default: ''
 runs:
   using: 'node12'
   main: 'lib/main.js'

@@ -39,6 +39,17 @@ To pin the exact version:
     version: '3.9.1'
 ```
 
+The action queries the GitHub API to fetch releases data, to avoid rate limiting,
+pass the default token with the `repo-token` variable:
+
+```yaml
+- name: Install Protoc
+  uses: arduino/setup-protoc@master
+  with:
+    repo-token: ${{ secrets.GITHUB_TOKEN }}
+```
+
+
 ## Development
 
 To work on the codebase you have to install all the dependencies:
