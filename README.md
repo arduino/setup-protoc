@@ -1,5 +1,7 @@
 # setup-protoc
 
+![test](https://github.com/arduino/setup-protoc/workflows/test/badge.svg)
+
 This action makes the `protoc` compiler available to Workflows.
 
 ## Usage
