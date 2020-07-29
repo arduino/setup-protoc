@@ -15,7 +15,7 @@ process.env["RUNNER_TOOL_CACHE"] = toolDir;
 import * as installer from "../src/installer";
 
 describe("installer tests", () => {
-  beforeEach(async function () {
+  beforeEach(async function() {
     await io.rmRF(toolDir);
     await io.rmRF(tempDir);
     await io.mkdirP(toolDir);
