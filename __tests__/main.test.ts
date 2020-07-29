@@ -49,8 +49,17 @@ describe("installer tests", () => {
   describe("Gets the latest release of protoc", () => {
     beforeEach(() => {
       nock("https://api.github.com")
-        .get("/repos/protocolbuffers/protobuf/releases")
-        .replyWithFile(200, path.join(dataDir, "releases.json"));
+        .get("/repos/protocolbuffers/protobuf/releases?page=1")
+        .replyWithFile(200, path.join(dataDir, "releases-1.json"));
+
+      nock("https://api.github.com")
+      .get("/repos/protocolbuffers/protobuf/releases?page=2")
+      .replyWithFile(200, path.join(dataDir, "releases-2.json"));
+
+
+      nock("https://api.github.com")
+      .get("/repos/protocolbuffers/protobuf/releases?page=3")
+      .replyWithFile(200, path.join(dataDir, "releases-3.json"));
     });
 
     afterEach(() => {
@@ -74,7 +83,7 @@ describe("installer tests", () => {
 
     it("Gets latest version of protoc using 3.x and no matching version is installed", async () => {
       await installer.getProtoc("3.x", true, GITHUB_TOKEN);
-      const protocDir = path.join(toolDir, "protoc", "3.9.1", os.arch());
+      const protocDir = path.join(toolDir, "protoc", "3.12.4", os.arch());
 
       expect(fs.existsSync(`${protocDir}.complete`)).toBe(true);
       if (IS_WINDOWS) {
@@ -90,9 +99,18 @@ describe("installer tests", () => {
   describe("Gets the latest release of protoc with broken latest rc tag", () => {
     beforeEach(() => {
       nock("https://api.github.com")
-        .get("/repos/protocolbuffers/protobuf/releases")
+        .get("/repos/protocolbuffers/protobuf/releases?page=1")
         .replyWithFile(200, path.join(dataDir, "releases-broken-rc-tag.json"));
-    });
+  
+        nock("https://api.github.com")
+        .get("/repos/protocolbuffers/protobuf/releases?page=2")
+        .replyWithFile(200, path.join(dataDir, "releases-2.json"));
+
+
+        nock("https://api.github.com")
+        .get("/repos/protocolbuffers/protobuf/releases?page=3")
+        .replyWithFile(200, path.join(dataDir, "releases-3.json"));
+      });
 
     afterEach(() => {
       nock.cleanAll();

@@ -149,10 +149,17 @@ async function fetchVersions(
     rest = new restm.RestClient("setup-protoc");
   }
 
-  let tags: IProtocRelease[] =
-    (await rest.get<IProtocRelease[]>(
-      "https://api.github.com/repos/protocolbuffers/protobuf/releases"
+  let tags: IProtocRelease[] = [];
+  for (let pageNum=1,morePages=true; morePages; pageNum++) {
+    let nextPage: IProtocRelease[] = (await rest.get<IProtocRelease[]>(
+      "https://api.github.com/repos/protocolbuffers/protobuf/releases?page=" + pageNum
     )).result || [];
+    if (nextPage.length > 0) {
+      tags = tags.concat(nextPage);
+    } else {
+      morePages = false;
+    }
+  }
 
   return tags
     .filter(tag => tag.tag_name.match(/v\d+\.[\w\.]+/g))
