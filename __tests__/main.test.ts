@@ -15,7 +15,7 @@ process.env["RUNNER_TOOL_CACHE"] = toolDir;
 import * as installer from "../src/installer";
 
 describe("installer tests", () => {
-  beforeEach(async function() {
+  beforeEach(async function () {
     await io.rmRF(toolDir);
     await io.rmRF(tempDir);
     await io.mkdirP(toolDir);
@@ -53,13 +53,12 @@ describe("installer tests", () => {
         .replyWithFile(200, path.join(dataDir, "releases-1.json"));
 
       nock("https://api.github.com")
-      .get("/repos/protocolbuffers/protobuf/releases?page=2")
-      .replyWithFile(200, path.join(dataDir, "releases-2.json"));
-
+        .get("/repos/protocolbuffers/protobuf/releases?page=2")
+        .replyWithFile(200, path.join(dataDir, "releases-2.json"));
 
       nock("https://api.github.com")
-      .get("/repos/protocolbuffers/protobuf/releases?page=3")
-      .replyWithFile(200, path.join(dataDir, "releases-3.json"));
+        .get("/repos/protocolbuffers/protobuf/releases?page=3")
+        .replyWithFile(200, path.join(dataDir, "releases-3.json"));
     });
 
     afterEach(() => {
@@ -101,16 +100,15 @@ describe("installer tests", () => {
       nock("https://api.github.com")
         .get("/repos/protocolbuffers/protobuf/releases?page=1")
         .replyWithFile(200, path.join(dataDir, "releases-broken-rc-tag.json"));
-  
-        nock("https://api.github.com")
+
+      nock("https://api.github.com")
         .get("/repos/protocolbuffers/protobuf/releases?page=2")
         .replyWithFile(200, path.join(dataDir, "releases-2.json"));
 
-
-        nock("https://api.github.com")
+      nock("https://api.github.com")
         .get("/repos/protocolbuffers/protobuf/releases?page=3")
         .replyWithFile(200, path.join(dataDir, "releases-3.json"));
-      });
+    });
 
     afterEach(() => {
       nock.cleanAll();
