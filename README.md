@@ -10,14 +10,14 @@ To get the latest stable version of `protoc` just add this step:
 
 ```yaml
 - name: Install Protoc
-  uses: arduino/setup-protoc@master
+  uses: arduino/setup-protoc@v1
 ```
 
 If you want to pin a major or minor version you can use the `.x` wildcard:
 
 ```yaml
 - name: Install Protoc
-  uses: arduino/setup-protoc@master
+  uses: arduino/setup-protoc@v1
   with:
     version: '3.x'
 ```
@@ -26,7 +26,7 @@ You can also require to include releases marked as `pre-release` in Github using
 
 ```yaml
 - name: Install Protoc
-  uses: arduino/setup-protoc@master
+  uses: arduino/setup-protoc@v1
   with:
     version: '3.x'
     include-pre-releases: true
@@ -36,7 +36,7 @@ To pin the exact version:
 
 ```yaml
 - name: Install Protoc
-  uses: arduino/setup-protoc@master
+  uses: arduino/setup-protoc@v1
   with:
     version: '3.9.1'
 ```
@@ -46,7 +46,7 @@ pass the default token with the `repo-token` variable:
 
 ```yaml
 - name: Install Protoc
-  uses: arduino/setup-protoc@master
+  uses: arduino/setup-protoc@v1
   with:
     repo-token: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -86,4 +86,9 @@ Action the workflow should be the following:
 1. `rm -rf node_modules` to remove all the dependencies.
 1. `npm install --production` to add back **only** the runtime dependencies.
 1. `git add lib node_modules` to check in the code that matters.
+1. If the release will increment the major version, update the action refs in the examples in README.md
+   (e.g., `uses: arduino/setup-protoc@v1` -> `uses: arduino/setup-protoc@v2`).
 1. open a PR and request a review.
+1. After PR is merged, create a release, following the `vX.X.X` tag name convention.
+1. After the release, rebase the release branch for that major version (e.g., `v1` branch for the v1.x.x tags) on the tag.
+   If no branch exists for the release's major version, create one.
