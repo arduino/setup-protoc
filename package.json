@@ -24,8 +24,8 @@
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.2.6",
-    "@actions/tool-cache": "^1.1.0",
     "@actions/exec": "^1.0.0",
+    "@actions/tool-cache": "^1.1.0",
     "semver": "^6.1.1"
   },
   "devDependencies": {
@@ -35,8 +35,8 @@
     "@types/semver": "^6.0.0",
     "jest": "^24.8.0",
     "jest-circus": "^24.7.1",
-    "prettier": "^1.17.1",
     "nock": "^10.0.6",
+    "prettier": "^1.17.1",
     "ts-jest": "^24.0.2",
     "typescript": "^3.5.1"
   }
