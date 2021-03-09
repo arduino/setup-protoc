@@ -92,3 +92,13 @@ Action the workflow should be the following:
 1. After PR is merged, create a release, following the `vX.X.X` tag name convention.
 1. After the release, rebase the release branch for that major version (e.g., `v1` branch for the v1.x.x tags) on the tag.
    If no branch exists for the release's major version, create one.
+
+
+
+## Security
+
+If you think you found a vulnerability or other security-related bug in this project, please read our
+[security policy](https://github.com/arduino/setup-protoc/security/policy) and report the bug to our Security Team 🛡️
+Thank you!
+
+e-mail contact: security@arduino.cc
