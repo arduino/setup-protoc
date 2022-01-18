@@ -126,7 +126,7 @@ function getFileName(version: string): string {
     return util.format("protoc-%s-win%s.zip", version, arch);
   }
 
-  const arch: string = (function (): string {
+  const arch: string = (function(): string {
     switch (osArch) {
       case "x64":
         return "x86_64";
