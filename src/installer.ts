@@ -126,7 +126,16 @@ function getFileName(version: string): string {
     return util.format("protoc-%s-win%s.zip", version, arch);
   }
 
-  const arch: string = osArch == "x64" ? "x86_64" : "x86_32";
+  const arch: string = (function (): string {
+    switch (osArch) {
+      case "x64":
+        return "x86_64";
+      case "arm64":
+        return "aarch_64";
+      default:
+        return "x86_32";
+    }
+  })();
 
   if (osPlat == "darwin") {
     return util.format("protoc-%s-osx-%s.zip", version, arch);
