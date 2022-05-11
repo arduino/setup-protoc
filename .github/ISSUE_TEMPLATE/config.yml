@@ -1,0 +1,11 @@
+# Source: https://github.com/arduino/tooling-project-assets/blob/main/issue-templates/template-choosers/github-actions/config.yml
+# See: https://docs.github.com/communities/using-templates-to-encourage-useful-issues-and-pull-requests/configuring-issue-templates-for-your-repository#configuring-the-template-chooser
+
+blank_issues_enabled: false
+contact_links:
+  - name: Learn about using this project
+    url: https://github.com/arduino/setup-protoc#readme
+    about: Detailed usage documentation is available here.
+  - name: Learn about GitHub Actions
+    url: https://docs.github.com/actions
+    about: Everything you need to know to get started with GitHub Actions.
