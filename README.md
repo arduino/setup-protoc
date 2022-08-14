@@ -1,5 +1,6 @@
 # setup-protoc
 
+[![Check npm Dependencies status](https://github.com/arduino/setup-protoc/actions/workflows/check-npm-dependencies-task.yml/badge.svg)](https://github.com/arduino/setup-protoc/actions/workflows/check-npm-dependencies-task.yml)
 ![test](https://github.com/arduino/setup-protoc/workflows/test/badge.svg)
 
 This action makes the `protoc` compiler available to Workflows.
