@@ -3,6 +3,7 @@
 [![Check npm Dependencies status](https://github.com/arduino/setup-protoc/actions/workflows/check-npm-dependencies-task.yml/badge.svg)](https://github.com/arduino/setup-protoc/actions/workflows/check-npm-dependencies-task.yml)
 ![test](https://github.com/arduino/setup-protoc/workflows/test/badge.svg)
 [![Sync Labels status](https://github.com/arduino/setup-protoc/actions/workflows/sync-labels-npm.yml/badge.svg)](https://github.com/arduino/setup-protoc/actions/workflows/sync-labels-npm.yml)
+[![Check Markdown status](https://github.com/arduino/setup-protoc/actions/workflows/check-markdown-task.yml/badge.svg)](https://github.com/arduino/setup-protoc/actions/workflows/check-markdown-task.yml)
 
 This action makes the `protoc` compiler available to Workflows.
 
