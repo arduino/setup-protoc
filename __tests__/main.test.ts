@@ -14,6 +14,24 @@ process.env["RUNNER_TEMP"] = tempDir;
 process.env["RUNNER_TOOL_CACHE"] = toolDir;
 import * as installer from "../src/installer";
 
+describe("filename tests", () => {
+  const tests = [
+    ["protoc-3.20.2-linux-x86_32.zip", "linux", ""],
+    ["protoc-3.20.2-linux-x86_64.zip", "linux", "x64"],
+    ["protoc-3.20.2-linux-aarch_64.zip", "linux", "arm64"],
+    ["protoc-3.20.2-linux-ppcle_64.zip", "linux", "ppc64"],
+    ["protoc-3.20.2-linux-s390_64.zip", "linux", "s390x"],
+    ["protoc-3.20.2-osx-aarch_64.zip", "darwin", "arm64"],
+    ["protoc-3.20.2-osx-x86_64.zip", "darwin", "x64"]
+  ];
+  for (const [expected, plat, arch] of tests) {
+    it(`downloads ${expected} correctly`, () => {
+      const actual = installer.getFileName("3.20.2", plat, arch);
+      expect(expected).toBe(actual);
+    });
+  }
+});
+
 describe("installer tests", () => {
   beforeEach(async function() {
     await io.rmRF(toolDir);

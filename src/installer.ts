@@ -91,7 +91,7 @@ export async function getProtoc(
 
 async function downloadRelease(version: string): Promise<string> {
   // Download
-  let fileName: string = getFileName(version);
+  let fileName: string = getFileName(version, osPlat, osArch);
   let downloadUrl: string = util.format(
     "https://github.com/protocolbuffers/protobuf/releases/download/%s/%s",
     version,
@@ -114,7 +114,48 @@ async function downloadRelease(version: string): Promise<string> {
   return await tc.cacheDir(extPath, "protoc", version);
 }
 
-function getFileName(version: string): string {
+/**
+ *
+ * @param osArch - A string identifying the operating system platform for which the Node.js binary was compiled.
+ * See https://nodejs.org/api/os.html#osplatform for possible values.
+ * @returns Suffix for the protoc filename.
+ */
+function fileNameSuffix(osArch: string): string {
+  switch (osArch) {
+    case "x64": {
+      return "x86_64";
+    }
+    case "arm64": {
+      return "aarch_64";
+    }
+    case "s390x": {
+      return "s390_64";
+    }
+    case "ppc64": {
+      return "ppcle_64";
+    }
+    default: {
+      return "x86_32";
+    }
+  }
+}
+
+/**
+ * Returns the filename of the protobuf compiler.
+ *
+ * @param version - The version to download
+ * @param osPlat - The operating system platform for which the Node.js binary was compiled.
+ * See https://nodejs.org/api/os.html#osplatform for more.
+ * @param osArch - The operating system CPU architecture for which the Node.js binary was compiled.
+ * See https://nodejs.org/api/os.html#osplatform for more.
+ * @returns The filename of the protocol buffer for the given release, platform and architecture.
+ *
+ */
+export function getFileName(
+  version: string,
+  osPlat: string,
+  osArch: string
+): string {
   // to compose the file name, strip the leading `v` char
   if (version.startsWith("v")) {
     version = version.slice(1, version.length);
@@ -126,13 +167,13 @@ function getFileName(version: string): string {
     return util.format("protoc-%s-win%s.zip", version, arch);
   }
 
-  const arch: string = osArch == "x64" ? "x86_64" : "x86_32";
+  const suffix = fileNameSuffix(osArch);
 
   if (osPlat == "darwin") {
-    return util.format("protoc-%s-osx-%s.zip", version, arch);
+    return util.format("protoc-%s-osx-%s.zip", version, suffix);
   }
 
-  return util.format("protoc-%s-linux-%s.zip", version, arch);
+  return util.format("protoc-%s-linux-%s.zip", version, suffix);
 }
 
 // Retrieve a list of versions scraping tags from the Github API
