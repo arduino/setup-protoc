@@ -3,7 +3,7 @@ name: Check Taskfiles
 
 env:
   # See: https://github.com/actions/setup-node/#readme
-  NODE_VERSION: 12.x
+  NODE_VERSION: 16.x
 
 # See: https://docs.github.com/actions/using-workflows/events-that-trigger-workflows
 on:
