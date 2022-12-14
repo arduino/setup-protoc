@@ -8,6 +8,7 @@
 [![Check Taskfiles status](https://github.com/arduino/setup-protoc/actions/workflows/check-taskfiles.yml/badge.svg)](https://github.com/arduino/setup-protoc/actions/workflows/check-taskfiles.yml)
 [![Integration Tests status](https://github.com/arduino/setup-protoc/actions/workflows/test-integration.yml/badge.svg)](https://github.com/arduino/setup-protoc/actions/workflows/test-integration.yml)
 [![Check npm status](https://github.com/arduino/setup-protoc/actions/workflows/check-npm-task.yml/badge.svg)](https://github.com/arduino/setup-protoc/actions/workflows/check-npm-task.yml)
+[![Check TypeScript status](https://github.com/arduino/setup-protoc/actions/workflows/check-typescript-task.yml/badge.svg)](https://github.com/arduino/setup-protoc/actions/workflows/check-typescript-task.yml)
 
 This action makes the `protoc` compiler available to Workflows.
 

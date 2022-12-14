@@ -228,3 +228,16 @@ tasks:
         else
           echo "{{.RAW_PATH}}"
         fi
+  ts:lint:
+    desc: Lint TypeScript code
+    deps:
+      - task: npm:install-deps
+    cmds:
+      - npx eslint --ext .js,.jsx,.ts,.tsx .
+
+  ts:fix-lint:
+    desc: Fix TypeScript code linting violations
+    deps:
+      - task: npm:install-deps
+    cmds:
+      - npx eslint --ext .js,.jsx,.ts,.tsx --fix .
