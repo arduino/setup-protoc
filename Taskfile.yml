@@ -194,6 +194,38 @@ tasks:
           -r "{{.STYLELINTRC_SCHEMA_PATH}}" \
           -d "{{.PROJECT_FOLDER}}/{{.INSTANCE_PATH}}"
 
+  ts:validate:
+    desc: Validate TypeScript configuration file against its JSON schema
+    vars:
+      # Source: https://github.com/SchemaStore/schemastore/blob/master/src/schemas/json/tsconfig.json
+      SCHEMA_URL: https://json.schemastore.org/tsconfig.json
+      SCHEMA_PATH:
+        sh: task utility:mktemp-file TEMPLATE="tsconfig-schema-XXXXXXXXXX.json"
+      INSTANCE_PATH: '{{default "./tsconfig.json" .TSCONFIG_PATH}}'
+      WORKING_FOLDER:
+        sh: task utility:mktemp-folder TEMPLATE="ts-validate-XXXXXXXXXX"
+      WORKING_INSTANCE_PATH:
+        sh: echo "{{.WORKING_FOLDER}}/$(basename "{{.INSTANCE_PATH}}")"
+    cmds:
+      - |
+        # TypeScript allows comments in tsconfig.json.
+        # ajv-cli did not support comments in JSON at the 3.x version in use (support was added in a later version).
+        npx strip-json-comments-cli \
+          --no-whitespace \
+          "{{.INSTANCE_PATH}}" \
+          > "{{.WORKING_INSTANCE_PATH}}"
+      - |
+        wget \
+          --quiet \
+          --output-document="{{.SCHEMA_PATH}}" \
+          {{.SCHEMA_URL}}
+      - |
+        cd "{{.WORKING_FOLDER}}"  # Workaround for https://github.com/npm/cli/issues/3210
+        npx ajv-cli@{{.SCHEMA_DRAFT_4_AJV_CLI_VERSION}} validate \
+          --all-errors \
+          -s "{{.SCHEMA_PATH}}" \
+          -d "{{.WORKING_INSTANCE_PATH}}"
+
   # Make a temporary file named according to the passed TEMPLATE variable and print the path passed to stdout
   # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/windows-task/Taskfile.yml
   utility:mktemp-file:
