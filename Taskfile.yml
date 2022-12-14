@@ -1,6 +1,10 @@
 # See: https://taskfile.dev/#/usage
 version: "3"
 
+vars:
+  # Last version of ajv-cli with support for the JSON schema "Draft 4" specification
+  SCHEMA_DRAFT_4_AJV_CLI_VERSION: 3.3.0
+
 tasks:
   # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/check-dependencies-task/Taskfile.yml
   general:cache-dep-licenses:
@@ -116,3 +120,102 @@ tasks:
       - task: npm:install-deps
     cmds:
       - npx markdownlint-cli "**/*.md"
+
+  # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/check-npm-task/Taskfile.yml
+  npm:validate:
+    desc: Validate npm configuration files against their JSON schema
+    vars:
+      # Source: https://github.com/SchemaStore/schemastore/blob/master/src/schemas/json/package.json
+      SCHEMA_URL: https://json.schemastore.org/package.json
+      SCHEMA_PATH:
+        sh: task utility:mktemp-file TEMPLATE="package-json-schema-XXXXXXXXXX.json"
+      # Source: https://github.com/SchemaStore/schemastore/blob/master/src/schemas/json/ava.json
+      AVA_SCHEMA_URL: https://json.schemastore.org/ava.json
+      AVA_SCHEMA_PATH:
+        sh: task utility:mktemp-file TEMPLATE="ava-schema-XXXXXXXXXX.json"
+      # Source: https://github.com/SchemaStore/schemastore/blob/master/src/schemas/json/eslintrc.json
+      ESLINTRC_SCHEMA_URL: https://json.schemastore.org/eslintrc.json
+      ESLINTRC_SCHEMA_PATH:
+        sh: task utility:mktemp-file TEMPLATE="eslintrc-schema-XXXXXXXXXX.json"
+      # Source: https://github.com/SchemaStore/schemastore/blob/master/src/schemas/json/jscpd.json
+      JSCPD_SCHEMA_URL: https://json.schemastore.org/jscpd.json
+      JSCPD_SCHEMA_PATH:
+        sh: task utility:mktemp-file TEMPLATE="jscpd-schema-XXXXXXXXXX.json"
+      # Source: https://github.com/SchemaStore/schemastore/blob/master/src/schemas/json/npm-badges.json
+      NPM_BADGES_SCHEMA_URL: https://json.schemastore.org/npm-badges.json
+      NPM_BADGES_SCHEMA_PATH:
+        sh: task utility:mktemp-file TEMPLATE="npm-badges-schema-XXXXXXXXXX.json"
+      # Source: https://github.com/SchemaStore/schemastore/blob/master/src/schemas/json/prettierrc.json
+      PRETTIERRC_SCHEMA_URL: https://json.schemastore.org/prettierrc.json
+      PRETTIERRC_SCHEMA_PATH:
+        sh: task utility:mktemp-file TEMPLATE="prettierrc-schema-XXXXXXXXXX.json"
+      # Source: https://github.com/SchemaStore/schemastore/blob/master/src/schemas/json/semantic-release.json
+      SEMANTIC_RELEASE_SCHEMA_URL: https://json.schemastore.org/semantic-release.json
+      SEMANTIC_RELEASE_SCHEMA_PATH:
+        sh: task utility:mktemp-file TEMPLATE="semantic-release-schema-XXXXXXXXXX.json"
+      # Source: https://github.com/SchemaStore/schemastore/blob/master/src/schemas/json/stylelintrc.json
+      STYLELINTRC_SCHEMA_URL: https://json.schemastore.org/stylelintrc.json
+      STYLELINTRC_SCHEMA_PATH:
+        sh: task utility:mktemp-file TEMPLATE="stylelintrc-schema-XXXXXXXXXX.json"
+      INSTANCE_PATH: "**/package.json"
+      PROJECT_FOLDER:
+        sh: pwd
+      WORKING_FOLDER:
+        sh: task utility:mktemp-folder TEMPLATE="dependabot-validate-XXXXXXXXXX"
+    cmds:
+      - wget --quiet --output-document="{{.SCHEMA_PATH}}" {{.SCHEMA_URL}}
+      - wget --quiet --output-document="{{.AVA_SCHEMA_PATH}}" {{.AVA_SCHEMA_URL}}
+      - wget --quiet --output-document="{{.ESLINTRC_SCHEMA_PATH}}" {{.ESLINTRC_SCHEMA_URL}}
+      - wget --quiet --output-document="{{.JSCPD_SCHEMA_PATH}}" {{.JSCPD_SCHEMA_URL}}
+      - wget --quiet --output-document="{{.NPM_BADGES_SCHEMA_PATH}}" {{.NPM_BADGES_SCHEMA_URL}}
+      - wget --quiet --output-document="{{.PRETTIERRC_SCHEMA_PATH}}" {{.PRETTIERRC_SCHEMA_URL}}
+      - wget --quiet --output-document="{{.SEMANTIC_RELEASE_SCHEMA_PATH}}" {{.SEMANTIC_RELEASE_SCHEMA_URL}}
+      - wget --quiet --output-document="{{.STYLELINTRC_SCHEMA_PATH}}" {{.STYLELINTRC_SCHEMA_URL}}
+      - |
+        cd "{{.WORKING_FOLDER}}"  # Workaround for https://github.com/npm/cli/issues/3210
+        npx ajv-cli@{{.SCHEMA_DRAFT_4_AJV_CLI_VERSION}} validate \
+          --all-errors \
+          -s "{{.SCHEMA_PATH}}" \
+          -r "{{.AVA_SCHEMA_PATH}}" \
+          -r "{{.ESLINTRC_SCHEMA_PATH}}" \
+          -r "{{.JSCPD_SCHEMA_PATH}}" \
+          -r "{{.NPM_BADGES_SCHEMA_PATH}}" \
+          -r "{{.PRETTIERRC_SCHEMA_PATH}}" \
+          -r "{{.SEMANTIC_RELEASE_SCHEMA_PATH}}" \
+          -r "{{.STYLELINTRC_SCHEMA_PATH}}" \
+          -d "{{.PROJECT_FOLDER}}/{{.INSTANCE_PATH}}"
+
+  # Make a temporary file named according to the passed TEMPLATE variable and print the path passed to stdout
+  # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/windows-task/Taskfile.yml
+  utility:mktemp-file:
+    vars:
+      RAW_PATH:
+        sh: mktemp --tmpdir "{{.TEMPLATE}}"
+    cmds:
+      - task: utility:normalize-path
+        vars:
+          RAW_PATH: "{{.RAW_PATH}}"
+
+  # Make a temporary folder named according to the passed TEMPLATE variable and print the path passed to stdout
+  # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/windows-task/Taskfile.yml
+  utility:mktemp-folder:
+    vars:
+      RAW_PATH:
+        sh: mktemp --directory --tmpdir "{{.TEMPLATE}}"
+    cmds:
+      - task: utility:normalize-path
+        vars:
+          RAW_PATH: "{{.RAW_PATH}}"
+
+  # Print a normalized version of the path passed via the RAW_PATH variable to stdout
+  # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/windows-task/Taskfile.yml
+  utility:normalize-path:
+    cmds:
+      - |
+        if [[ "{{.OS}}" == "Windows_NT" ]] && which cygpath &>/dev/null; then
+            # Even though the shell handles POSIX format absolute paths as expected, external applications do not.
+            # So paths passed to such applications must first be converted to Windows format.
+            cygpath -w "{{.RAW_PATH}}"
+        else
+          echo "{{.RAW_PATH}}"
+        fi
