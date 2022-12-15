@@ -1,0 +1,89 @@
+name: Integration Tests
+
+# See: https://docs.github.com/en/actions/reference/events-that-trigger-workflows
+on:
+  push:
+    paths:
+      - ".github/workflows/test-integration.ya?ml"
+      - "lib/**"
+      - "action.yml"
+  pull_request:
+    paths:
+      - ".github/workflows/test-integration.ya?ml"
+      - "lib/**"
+      - "action.yml"
+  schedule:
+    # Run every Tuesday at 8 AM UTC to catch breakage caused by external changes.
+    - cron: "0 8 * * TUE"
+  workflow_dispatch:
+  repository_dispatch:
+
+jobs:
+  defaults:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Run action with defaults
+        uses: ./ # Use the action from the local path.
+
+      - name: Run protoc
+        # Verify that protoc was installed
+        run: protoc --version
+
+  version:
+    name: version (${{ matrix.version.input }}, ${{ matrix.runs-on }})
+    runs-on: ${{ matrix.runs-on }}
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        runs-on:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+        version:
+          - input: 3.x
+            expected: "libprotoc 3.20.3"
+          - input: 3.17.x
+            expected: "libprotoc 3.17.3"
+          - input: 3.17.2
+            expected: "libprotoc 3.17.2"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Run action, using protoc minor version wildcard
+        uses: ./
+        with:
+          version: '${{ matrix.version.input }}'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check protoc version
+        shell: bash
+        run: |
+          [[ "$(protoc --version)" == "${{ matrix.version.expected }}" ]]
+
+  invalid-version:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Run action, using invalid version
+        id: setup-protoc
+        continue-on-error: true
+        uses: ./
+        with:
+          version: 2.42.x
+
+      - name: Fail the job if the action run succeeded
+        if: steps.setup-task.outcome == 'success'
+        run: |
+          echo "::error::The action run was expected to fail, but passed!"
+          exit 1
