@@ -6,6 +6,7 @@
 [![Check Markdown status](https://github.com/arduino/setup-protoc/actions/workflows/check-markdown-task.yml/badge.svg)](https://github.com/arduino/setup-protoc/actions/workflows/check-markdown-task.yml)
 [![Check License status](https://github.com/arduino/setup-protoc/actions/workflows/check-license.yml/badge.svg)](https://github.com/arduino/setup-protoc/actions/workflows/check-license.yml)
 [![Check Taskfiles status](https://github.com/arduino/setup-protoc/actions/workflows/check-taskfiles.yml/badge.svg)](https://github.com/arduino/setup-protoc/actions/workflows/check-taskfiles.yml)
+[![Integration Tests status](https://github.com/arduino/setup-protoc/actions/workflows/test-integration.yml/badge.svg)](https://github.com/arduino/setup-protoc/actions/workflows/test-integration.yml)
 
 This action makes the `protoc` compiler available to Workflows.
 
