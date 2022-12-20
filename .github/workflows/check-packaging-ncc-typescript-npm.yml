@@ -1,0 +1,52 @@
+name: Check Packaging
+
+env:
+  # See: https://github.com/actions/setup-node/#readme
+  NODE_VERSION: 16.x
+
+on:
+  push:
+    paths:
+      - ".github/workflows/check-packaging-ncc-typescript-npm.ya?ml"
+      - "lerna.json"
+      - "package.json"
+      - "package-lock.json"
+      - "Taskfile.ya?ml"
+      - "tsconfig.json"
+      - "**.[jt]sx?"
+  pull_request:
+    paths:
+      - ".github/workflows/check-packaging-ncc-typescript-npm.ya?ml"
+      - "lerna.json"
+      - "package.json"
+      - "package-lock.json"
+      - "Taskfile.ya?ml"
+      - "tsconfig.json"
+      - "**.[jt]sx?"
+  workflow_dispatch:
+  repository_dispatch:
+
+jobs:
+  check-packaging:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: |
+          npm run build
+
+      - name: Check packaging
+        # Ignoring CR because ncc's output has a mixture of line endings, while the repository should only contain
+        # Unix-style EOL.
+        run: git diff --ignore-cr-at-eol --color --exit-code lib
