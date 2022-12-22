@@ -6,9 +6,17 @@ vars:
   SCHEMA_DRAFT_4_AJV_CLI_VERSION: 3.3.0
 
 tasks:
+  # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/check-npm-dependencies-task/Taskfile.yml
+  general:prepare-deps:
+    desc: Prepare project dependencies for license check
+    deps:
+      - task: npm:install-deps
+
   # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/check-dependencies-task/Taskfile.yml
   general:cache-dep-licenses:
     desc: Cache dependency license metadata
+    deps:
+      - task: general:prepare-deps
     cmds:
       - |
         if ! which licensed &>/dev/null; then
@@ -16,7 +24,8 @@ tasks:
             echo "Licensed does not have Windows support."
             echo "Please use Linux/macOS or download the dependencies cache from the GitHub Actions workflow artifact."
           else
-            echo "licensed not found or not in PATH. Please install: https://github.com/github/licensed#as-an-executable"
+            echo "licensed not found or not in PATH."
+            echo "Please install: https://github.com/github/licensed#as-an-executable"
           fi
           exit 1
         fi
