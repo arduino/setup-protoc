@@ -51,6 +51,10 @@ export async function getProtoc(
   }
   process.stdout.write("Getting protoc version: " + version + os.EOL);
 
+  // "denormalize" the version; this denormalized form is used both
+  // for the cache and for `downloadRelease`.
+  version = denormalizeVersion(version);
+
   // look if the binary is cached
   let toolPath: string;
   toolPath = tc.find("protoc", version);
@@ -103,7 +107,6 @@ async function downloadRelease(version: string): Promise<string> {
   try {
     downloadPath = await tc.downloadTool(downloadUrl);
   } catch (error) {
-    core.debug(error);
     throw `Failed to download version ${version}: ${error}`;
   }
 
@@ -112,6 +115,25 @@ async function downloadRelease(version: string): Promise<string> {
 
   // Install into the local tool cache - node extracts with a root folder that matches the fileName downloaded
   return await tc.cacheDir(extPath, "protoc", version);
+}
+
+function denormalizeVersion(version: string): string {
+  const parsed = semver.parse(version);
+
+  if (parsed === null) {
+    throw new Error(`unable to parse ${version} as SemVer`);
+  }
+
+  // We normalized versions like 21.10 into 21.10.0 earlier; to actually get
+  // their file we have to de-normalize them back to 21.10.
+  if (parsed.major > 3) {
+    // We intentionally re-add the `v` prefix here, since the version
+    // coming in is from computeVersion, which also explicitly adds it.
+    version = `v${parsed.major}.${parsed.minor}`;
+    core.debug(`denormalized ${parsed.version} to ${version}`);
+  }
+
+  return version;
 }
 
 function getFileName(version: string): string {
@@ -154,7 +176,7 @@ async function fetchVersions(
     let nextPage: IProtocRelease[] =
       (await rest.get<IProtocRelease[]>(
         "https://api.github.com/repos/protocolbuffers/protobuf/releases?page=" +
-          pageNum
+        pageNum
       )).result || [];
     if (nextPage.length > 0) {
       tags = tags.concat(nextPage);
@@ -166,7 +188,23 @@ async function fetchVersions(
   return tags
     .filter(tag => tag.tag_name.match(/v\d+\.[\w\.]+/g))
     .filter(tag => includePrerelease(tag.prerelease, includePreReleases))
-    .map(tag => tag.tag_name.replace("v", ""));
+    .map(tag => tag.tag_name.replace("v", ""))
+    .map(normalizeTag);
+}
+
+// Starting after v3.20.3, the tagging scheme switched to vX.Y, where
+// X is the former minor and Y is the former patch.
+// This "normalizes" the new tagging scheme into a semver-style vX.Y.Z,
+// where Z is always 0.
+function normalizeTag(tag: string): string {
+  if (tag.split(".").length === 3) {
+    return tag;
+  } else if (tag.split(".").length === 2) {
+    core.debug(`normalizing release tag ${tag} to ${tag}.0`);
+    return `${tag}.0`;
+  }
+
+  throw new Error(`unexpected release tag format: ${tag}`);
 }
 
 // Compute an actual version starting from the `version` configuration param.
