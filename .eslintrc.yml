@@ -1,0 +1,24 @@
+# Source: https://github.com/per1234/.github/blob/main/workflow-templates/assets/check-typescript/.eslintrc.yml
+# See: https://github.com/typescript-eslint/typescript-eslint/blob/main/docs/linting/README.md#configuration
+# The code style defined in this file is the official standardized style to be used in all Arduino projects and should
+# not be modified.
+
+extends:
+  - airbnb-typescript/base
+  - prettier
+  - 'eslint:recommended'
+  - 'plugin:@typescript-eslint/recommended'
+  - 'plugin:import/recommended'
+plugins:
+  - "@typescript-eslint"
+parser: "@typescript-eslint/parser"
+parserOptions:
+  project:
+    - "./tsconfig.eslint.json"
+rules:
+  max-len:
+    - error
+    - code: 180
+  no-console: "off"
+  no-underscore-dangle: "off"
+root: true
