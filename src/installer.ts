@@ -202,9 +202,10 @@ function normalizeTag(tag: string): string {
   } else if (tag.split(".").length === 2) {
     core.debug(`normalizing release tag ${tag} to ${tag}.0`);
     return `${tag}.0`;
+  } else {
+    core.debug(`unknown tag format: ${tag}; forwarding`);
+    return tag;
   }
-
-  throw new Error(`unexpected release tag format: ${tag}`);
 }
 
 // Compute an actual version starting from the `version` configuration param.
