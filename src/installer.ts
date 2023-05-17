@@ -176,7 +176,7 @@ async function fetchVersions(
     let nextPage: IProtocRelease[] =
       (await rest.get<IProtocRelease[]>(
         "https://api.github.com/repos/protocolbuffers/protobuf/releases?page=" +
-        pageNum
+          pageNum
       )).result || [];
     if (nextPage.length > 0) {
       tags = tags.concat(nextPage);
