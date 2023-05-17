@@ -1,0 +1,58 @@
+# Source: https://github.com/per1234/.github/blob/main/workflow-templates/check-typescript-task.md
+name: Check TypeScript
+
+env:
+  # See: https://github.com/actions/setup-node/#readme
+  NODE_VERSION: 16.x
+
+# See: https://docs.github.com/en/actions/reference/events-that-trigger-workflows
+on:
+  push:
+    paths:
+      - ".github/workflows/check-typescript-task.ya?ml"
+      - ".eslintignore"
+      - "**/.eslintrc*"
+      - "package.json"
+      - "package-lock.json"
+      - "Taskfile.ya?ml"
+      - "tsconfig.eslint.json"
+      - "tsconfig.json"
+      - "**.[jt]sx?"
+  pull_request:
+    paths:
+      - ".github/workflows/check-typescript-task.ya?ml"
+      - ".eslintignore"
+      - "**/.eslintrc*"
+      - "package.json"
+      - "package-lock.json"
+      - "Taskfile.ya?ml"
+      - "tsconfig.eslint.json"
+      - "tsconfig.json"
+      - "**.[jt]sx?"
+  workflow_dispatch:
+  repository_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install Task
+        uses: arduino/setup-task@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          version: 3.x
+
+      - name: Lint
+        run: task ts:lint | true
