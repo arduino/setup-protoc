@@ -116,8 +116,8 @@ async function downloadRelease(version: string): Promise<string> {
 
 /**
  *
- * @param osArch - A string identifying the operating system platform for which the Node.js binary was compiled.
- * See https://nodejs.org/api/os.html#osplatform for possible values.
+ * @param osArch - A string identifying operating system CPU architecture for which the Node.js binary was compiled.
+ * See https://nodejs.org/api/os.html#osarch for possible values.
  * @returns Suffix for the protoc filename.
  */
 function fileNameSuffix(osArch: string): string {
