@@ -147,7 +147,7 @@ function fileNameSuffix(osArch: string): string {
  * @param osPlat - The operating system platform for which the Node.js binary was compiled.
  * See https://nodejs.org/api/os.html#osplatform for more.
  * @param osArch - The operating system CPU architecture for which the Node.js binary was compiled.
- * See https://nodejs.org/api/os.html#osplatform for more.
+ * See https://nodejs.org/api/os.html#osarch for more.
  * @returns The filename of the protocol buffer for the given release, platform and architecture.
  *
  */
