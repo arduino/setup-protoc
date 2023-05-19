@@ -192,11 +192,11 @@ async function fetchVersions(
 
   let tags: IProtocRelease[] = [];
   for (let pageNum = 1, morePages = true; morePages; pageNum++) {
-    let nextPage: IProtocRelease[] =
-      (await rest.get<IProtocRelease[]>(
-        "https://api.github.com/repos/protocolbuffers/protobuf/releases?page=" +
-          pageNum
-      )).result || [];
+    let p = await rest.get<IProtocRelease[]>(
+      "https://api.github.com/repos/protocolbuffers/protobuf/releases?page=" +
+        pageNum
+    );
+    let nextPage: IProtocRelease[] = p.result || [];
     if (nextPage.length > 0) {
       tags = tags.concat(nextPage);
     } else {
