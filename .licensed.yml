@@ -86,3 +86,7 @@ allowed:
   - eupl-1.2
   - liliq-r-1.1
   - liliq-rplus-1.1
+
+reviewed:
+  npm:
+    - typed-rest-client
