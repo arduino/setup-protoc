@@ -55,4 +55,4 @@ jobs:
           version: 3.x
 
       - name: Lint
-        run: task ts:lint | true
+        run: task ts:lint
