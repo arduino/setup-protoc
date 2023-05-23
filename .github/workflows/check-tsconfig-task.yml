@@ -1,0 +1,54 @@
+name: Check TypeScript Configuration
+
+env:
+  # See: https://github.com/actions/setup-node/#readme
+  NODE_VERSION: 16.x
+
+# See: https://docs.github.com/en/actions/reference/events-that-trigger-workflows
+on:
+  push:
+    paths:
+      - ".github/workflows/check-tsconfig-task.ya?ml"
+      - "**/tsconfig*.json"
+      - "Taskfile.ya?ml"
+  pull_request:
+    paths:
+      - ".github/workflows/check-tsconfig-task.ya?ml"
+      - "**/tsconfig*.json"
+      - "Taskfile.ya?ml"
+  schedule:
+    # Run every Tuesday at 8 AM UTC to catch breakage from changes to the JSON schema.
+    - cron: "0 8 * * TUE"
+  workflow_dispatch:
+  repository_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        file:
+          - ./tsconfig.json
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install Task
+        uses: arduino/setup-task@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          version: 3.x
+
+      - name: Validate ${{ matrix.file }}
+        env:
+          TSCONFIG_PATH: ${{ matrix.file }}
+        run: task --silent ts:validate
