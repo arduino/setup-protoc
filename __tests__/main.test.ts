@@ -10,8 +10,8 @@ const dataDir = path.join(__dirname, "testdata");
 const IS_WINDOWS = process.platform === "win32";
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN || "";
 
-process.env["RUNNER_TEMP"] = tempDir;
-process.env["RUNNER_TOOL_CACHE"] = toolDir;
+process.env.RUNNER_TEMP = tempDir;
+process.env.RUNNER_TOOL_CACHE = toolDir;
 import * as installer from "../src/installer";
 
 describe("filename tests", () => {
@@ -26,12 +26,12 @@ describe("filename tests", () => {
     ["protoc-3.20.2-win64.zip", "win32", "x64"],
     ["protoc-3.20.2-win32.zip", "win32", "x32"]
   ];
-  for (const [expected, plat, arch] of tests) {
-    it(`downloads ${expected} correctly`, () => {
+  it(`Downloads all expected versions correctly`, () => {
+    for (const [expected, plat, arch] of tests) {
       const actual = installer.getFileName("3.20.2", plat, arch);
       expect(expected).toBe(actual);
-    });
-  }
+    }
+  });
 });
 
 describe("installer tests", () => {

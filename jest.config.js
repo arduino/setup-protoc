@@ -1,3 +1,5 @@
+/*global module*/
+
 module.exports = {
   clearMocks: true,
   moduleFileExtensions: ['js', 'ts'],
