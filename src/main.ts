@@ -10,7 +10,7 @@ async function run() {
     let repoToken = core.getInput("repo-token");
     await installer.getProtoc(version, includePreReleases, repoToken);
   } catch (error) {
-    core.setFailed(error.message);
+    core.setFailed(`${error}`);
   }
 }
 
