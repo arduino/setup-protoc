@@ -103,7 +103,34 @@ To run the tests:
 npm run test
 ```
 
-### 6. Commit
+### 6. Build
+
+It is necessary to compile the code before it can be used by GitHub Actions. We check in the `node_modules` to provide runtime dependencies to the system using the Action, so be careful not to `git add` all the development dependencies you might have under your local `node_modules`. 
+Remember to run these commands before committing any code changes:
+
+```
+npm run build
+```
+
+remove all the dependencies:
+
+```
+rm -rf node_modules
+```
+
+add back **only** the runtime dependencies:
+
+```
+npm install --production
+```
+
+check in the code that matters:
+
+```
+git add lib node_modules
+```
+
+### 7. Commit
 
 Everything is now ready to make your contribution to the project, so commit it to the repository and submit a pull request.
 
@@ -111,17 +138,8 @@ Thanks!
 
 ## Release workflow
 
-We check in the `node_modules` to provide runtime dependencies to the system
-using the Action, so be careful not to `git add` all the development dependencies
-you might have under your local `node_modules`. To release a new version of the
-Action the workflow should be the following:
+To release a new version of the Action the workflow should be the following:
 
-1. `npm install` to add all the dependencies, included development.
-1. `npm run test` to see everything works as expected.
-1. `npm run build` to build the Action under the `./lib` folder.
-1. `rm -rf node_modules` to remove all the dependencies.
-1. `npm install --production` to add back **only** the runtime dependencies.
-1. `git add lib node_modules` to check in the code that matters.
 1. If the release will increment the major version, update the action refs in the examples in README.md
    (e.g., `uses: arduino/setup-protoc@v1` -> `uses: arduino/setup-protoc@v2`).
 1. open a PR and request a review.
@@ -143,3 +161,4 @@ If you think you found a vulnerability or other security-related bug in this pro
 Thank you!
 
 e-mail contact: security@arduino.cc
+
