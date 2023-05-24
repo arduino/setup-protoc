@@ -62,7 +62,18 @@ pass the default token with the `repo-token` variable:
 ```
 
 
-## Development
+## Development workflow
+
+### 1. Install tools
+
+#### Node.js
+
+[**npm**](https://www.npmjs.com/) is used for dependency management.
+
+Follow the installation instructions here:<br />
+https://nodejs.dev/en/download
+
+### 2. Install dependencies
 
 To work on the codebase you have to install all the dependencies:
 
@@ -70,20 +81,35 @@ To work on the codebase you have to install all the dependencies:
 npm install
 ```
 
+### 3. Coding
+
+Now you're ready to work some [TypeScript](https://www.typescriptlang.org/) magic!
+
+Make sure to write or update tests for your work when appropriate.
+
+### 4. Format code
+
+Format the code to follow the standard style for the project:
+
+```
+npm run format
+```
+
+### 5. Run tests
+
 To run the tests:
 
 ```
 npm run test
 ```
 
-## Enable verbose logging for a pipeline
-Additional log events with the prefix ::debug:: can be enabled by setting the secret `ACTIONS_STEP_DEBUG` to `true`.
+### 6. Commit
 
-See [step-debug-logs](https://github.com/actions/toolkit/blob/master/docs/action-debugging.md#step-debug-logs) for reference.
+Everything is now ready to make your contribution to the project, so commit it to the repository and submit a pull request.
 
+Thanks!
 
-
-## Release
+## Release workflow
 
 We check in the `node_modules` to provide runtime dependencies to the system
 using the Action, so be careful not to `git add` all the development dependencies
@@ -103,6 +129,11 @@ Action the workflow should be the following:
 1. After the release, rebase the release branch for that major version (e.g., `v1` branch for the v1.x.x tags) on the tag.
    If no branch exists for the release's major version, create one.
 
+
+## Enable verbose logging for a pipeline
+Additional log events with the prefix ::debug:: can be enabled by setting the secret `ACTIONS_STEP_DEBUG` to `true`.
+
+See [step-debug-logs](https://github.com/actions/toolkit/blob/master/docs/action-debugging.md#step-debug-logs) for reference.
 
 
 ## Security
