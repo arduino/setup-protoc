@@ -29,7 +29,7 @@ If you want to pin a major or minor version you can use the `.x` wildcard:
 - name: Install Protoc
   uses: arduino/setup-protoc@v1
   with:
-    version: '3.x'
+    version: "3.x"
 ```
 
 You can also require to include releases marked as `pre-release` in Github using the `include-pre-releases` flag (the dafault value for this flag is `false`)
@@ -38,7 +38,7 @@ You can also require to include releases marked as `pre-release` in Github using
 - name: Install Protoc
   uses: arduino/setup-protoc@v1
   with:
-    version: '3.x'
+    version: "3.x"
     include-pre-releases: true
 ```
 
@@ -48,7 +48,7 @@ To pin the exact version:
 - name: Install Protoc
   uses: arduino/setup-protoc@v1
   with:
-    version: '3.9.1'
+    version: "3.9.1"
 ```
 
 The action queries the GitHub API to fetch releases data, to avoid rate limiting,
@@ -61,12 +61,11 @@ pass the default token with the `repo-token` variable:
     repo-token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-
 ## Enable verbose logging for a pipeline
+
 Additional log events with the prefix ::debug:: can be enabled by setting the secret `ACTIONS_STEP_DEBUG` to `true`.
 
 See [step-debug-logs](https://github.com/actions/toolkit/blob/master/docs/action-debugging.md#step-debug-logs) for reference.
-
 
 ## Security
 
