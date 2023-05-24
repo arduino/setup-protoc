@@ -66,14 +66,14 @@ pass the default token with the `repo-token` variable:
 
 To work on the codebase you have to install all the dependencies:
 
-```sh
-# npm install
+```
+npm install
 ```
 
 To run the tests:
 
-```sh
-# npm run test
+```
+npm run test
 ```
 
 ## Enable verbose logging for a pipeline
