@@ -5,7 +5,7 @@
   "description": "Setup protoc action",
   "main": "lib/main.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && ncc build",
     "format": "prettier --write **/*.ts",
     "format-check": "prettier --check **/*.ts",
     "test": "jest"
@@ -35,6 +35,7 @@
     "@types/semver": "^6.0.0",
     "@typescript-eslint/eslint-plugin": "^5.46.1",
     "@typescript-eslint/parser": "^5.46.1",
+    "@vercel/ncc": "^0.36.1",
     "ajv-cli": "^5.0.0",
     "ajv-formats": "^2.1.1",
     "eslint": "^8.29.0",

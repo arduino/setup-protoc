@@ -5,12 +5,12 @@ on:
   push:
     paths:
       - ".github/workflows/test-integration.ya?ml"
-      - "lib/**"
+      - "dist/**"
       - "action.yml"
   pull_request:
     paths:
       - ".github/workflows/test-integration.ya?ml"
-      - "lib/**"
+      - "dist/**"
       - "action.yml"
   schedule:
     # Run every Tuesday at 8 AM UTC to catch breakage caused by external changes.

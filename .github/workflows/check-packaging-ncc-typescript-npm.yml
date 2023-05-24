@@ -49,4 +49,4 @@ jobs:
       - name: Check packaging
         # Ignoring CR because ncc's output has a mixture of line endings, while the repository should only contain
         # Unix-style EOL.
-        run: git diff --ignore-cr-at-eol --color --exit-code lib
+        run: git diff --ignore-cr-at-eol --color --exit-code dist
