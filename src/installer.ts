@@ -1,5 +1,5 @@
 // Load tempDirectory before it gets wiped by tool-cache
-let tempDirectory = process.env["RUNNER_TEMP"] || "";
+let tempDirectory = process.env.RUNNER_TEMP || "";
 
 import * as os from "os";
 import * as path from "path";
@@ -11,7 +11,7 @@ if (!tempDirectory) {
   let baseLocation;
   if (process.platform === "win32") {
     // On windows use the USERPROFILE env variable
-    baseLocation = process.env["USERPROFILE"] || "C:\\";
+    baseLocation = process.env.USERPROFILE || "C:\\";
   } else {
     if (process.platform === "darwin") {
       baseLocation = "/Users";
@@ -27,8 +27,8 @@ import * as tc from "@actions/tool-cache";
 import * as exc from "@actions/exec";
 import * as io from "@actions/io";
 
-let osPlat: string = os.platform();
-let osArch: string = os.arch();
+const osPlat: string = os.platform();
+const osArch: string = os.arch();
 
 interface IProtocRelease {
   tag_name: string;
@@ -73,7 +73,7 @@ export async function getProtoc(
     // Go is installed, add $GOPATH/bin to the $PATH because setup-go
     // doesn't do it for us.
     let stdOut = "";
-    let options = {
+    const options = {
       listeners: {
         stdout: (data: Buffer) => {
           stdOut += data.toString();
@@ -91,8 +91,8 @@ export async function getProtoc(
 
 async function downloadRelease(version: string): Promise<string> {
   // Download
-  let fileName: string = getFileName(version, osPlat, osArch);
-  let downloadUrl: string = util.format(
+  const fileName: string = getFileName(version, osPlat, osArch);
+  const downloadUrl: string = util.format(
     "https://github.com/protocolbuffers/protobuf/releases/download/%s/%s",
     version,
     fileName
@@ -105,26 +105,28 @@ async function downloadRelease(version: string): Promise<string> {
   } catch (err) {
     if (err instanceof tc.HTTPError) {
       core.debug(err.message);
-      throw `Failed to download version ${version}: ${err.name}, ${err.message} - ${err.httpStatusCode}`;
+      throw new Error(
+        `Failed to download version ${version}: ${err.name}, ${err.message} - ${err.httpStatusCode}`
+      );
     }
-    throw `Failed to download version ${version}: ${err}`;
+    throw new Error(`Failed to download version ${version}: ${err}`);
   }
 
   // Extract
-  let extPath: string = await tc.extractZip(downloadPath);
+  const extPath: string = await tc.extractZip(downloadPath);
 
   // Install into the local tool cache - node extracts with a root folder that matches the fileName downloaded
-  return await tc.cacheDir(extPath, "protoc", version);
+  return tc.cacheDir(extPath, "protoc", version);
 }
 
 /**
  *
- * @param osArch - A string identifying operating system CPU architecture for which the Node.js binary was compiled.
+ * @param osArc - A string identifying operating system CPU architecture for which the Node.js binary was compiled.
  * See https://nodejs.org/api/os.html#osarch for possible values.
  * @returns Suffix for the protoc filename.
  */
-function fileNameSuffix(osArch: string): string {
-  switch (osArch) {
+function fileNameSuffix(osArc: string): string {
+  switch (osArc) {
     case "x64": {
       return "x86_64";
     }
@@ -147,17 +149,17 @@ function fileNameSuffix(osArch: string): string {
  * Returns the filename of the protobuf compiler.
  *
  * @param version - The version to download
- * @param osPlat - The operating system platform for which the Node.js binary was compiled.
+ * @param osPlatf - The operating system platform for which the Node.js binary was compiled.
  * See https://nodejs.org/api/os.html#osplatform for more.
- * @param osArch - The operating system CPU architecture for which the Node.js binary was compiled.
+ * @param osArc - The operating system CPU architecture for which the Node.js binary was compiled.
  * See https://nodejs.org/api/os.html#osarch for more.
  * @returns The filename of the protocol buffer for the given release, platform and architecture.
  *
  */
 export function getFileName(
   version: string,
-  osPlat: string,
-  osArch: string
+  osPlatf: string,
+  osArc: string
 ): string {
   // to compose the file name, strip the leading `v` char
   if (version.startsWith("v")) {
@@ -165,14 +167,14 @@ export function getFileName(
   }
 
   // The name of the Windows package has a different naming pattern
-  if (osPlat == "win32") {
-    const arch: string = osArch == "x64" ? "64" : "32";
+  if (osPlatf == "win32") {
+    const arch: string = osArc == "x64" ? "64" : "32";
     return util.format("protoc-%s-win%s.zip", version, arch);
   }
 
-  const suffix = fileNameSuffix(osArch);
+  const suffix = fileNameSuffix(osArc);
 
-  if (osPlat == "darwin") {
+  if (osPlatf == "darwin") {
     return util.format("protoc-%s-osx-%s.zip", version, suffix);
   }
 
@@ -195,11 +197,11 @@ async function fetchVersions(
 
   let tags: IProtocRelease[] = [];
   for (let pageNum = 1, morePages = true; morePages; pageNum++) {
-    let p = await rest.get<IProtocRelease[]>(
+    const p = await rest.get<IProtocRelease[]>(
       "https://api.github.com/repos/protocolbuffers/protobuf/releases?page=" +
         pageNum
     );
-    let nextPage: IProtocRelease[] = p.result || [];
+    const nextPage: IProtocRelease[] = p.result || [];
     if (nextPage.length > 0) {
       tags = tags.concat(nextPage);
     } else {
@@ -208,7 +210,7 @@ async function fetchVersions(
   }
 
   return tags
-    .filter(tag => tag.tag_name.match(/v\d+\.[\w\.]+/g))
+    .filter(tag => tag.tag_name.match(/v\d+\.[\w.]+/g))
     .filter(tag => includePrerelease(tag.prerelease, includePreReleases))
     .map(tag => tag.tag_name.replace("v", ""));
 }
