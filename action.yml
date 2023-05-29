@@ -13,7 +13,7 @@ inputs:
     default: ''
 runs:
   using: 'node16'
-  main: 'lib/main.js'
+  main: 'dist/index.js'
 branding:
   icon: 'box'
   color: 'green'

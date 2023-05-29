@@ -39,14 +39,16 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Install dependencies
-        run: npm install
+      - name: Install Task
+      uses: arduino/setup-task@v1
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        version: 3.x
 
       - name: Build project
-        run: |
-          npm run build
+        run: task ts:build
 
       - name: Check packaging
         # Ignoring CR because ncc's output has a mixture of line endings, while the repository should only contain
         # Unix-style EOL.
-        run: git diff --ignore-cr-at-eol --color --exit-code lib
+        run: git diff --ignore-cr-at-eol --color --exit-code dist

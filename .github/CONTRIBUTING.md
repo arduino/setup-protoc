@@ -41,29 +41,10 @@ npm run test
 
 ### 6. Build
 
-It is necessary to compile the code before it can be used by GitHub Actions. We check in the `node_modules` to provide runtime dependencies to the system using the Action, so be careful not to `git add` all the development dependencies you might have under your local `node_modules`.
-Remember to run these commands before committing any code changes:
+It is necessary to compile the code before it can be used by GitHub Actions. Remember to run these commands before committing any code changes:
 
 ```
-npm run build
-```
-
-remove all the dependencies:
-
-```
-rm -rf node_modules
-```
-
-add back **only** the runtime dependencies:
-
-```
-npm install --production
-```
-
-check in the code that matters:
-
-```
-git add lib node_modules
+task build
 ```
 
 ### 7. Commit
