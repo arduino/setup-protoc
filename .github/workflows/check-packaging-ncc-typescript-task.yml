@@ -40,10 +40,10 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Install Task
-      uses: arduino/setup-task@v1
-      with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        version: 3.x
+        uses: arduino/setup-task@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          version: 3.x
 
       - name: Build project
         run: task ts:build
