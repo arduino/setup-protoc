@@ -9,6 +9,11 @@ cache_path: .licenses/
 apps:
   - source_path: ./
 
+reviewed:
+  npm:
+    - typed-rest-client
+    - "@actions/http-client"
+
 # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/check-dependencies/GPL-3.0/.licensed.yml
 allowed:
   # The following are based on: https://www.gnu.org/licenses/license-list.html#GPLCompatibleLicenses
@@ -86,7 +91,3 @@ allowed:
   - eupl-1.2
   - liliq-r-1.1
   - liliq-rplus-1.1
-
-reviewed:
-  npm:
-    - typed-rest-client
