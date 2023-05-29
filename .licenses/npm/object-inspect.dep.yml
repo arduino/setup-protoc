@@ -1,6 +1,6 @@
 ---
 name: object-inspect
-version: 1.12.2
+version: 1.12.3
 type: npm
 summary: string representations of objects in node and the browser
 homepage: https://github.com/inspect-js/object-inspect
