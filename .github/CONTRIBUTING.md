@@ -44,8 +44,7 @@ npm run test
 It is necessary to compile the code before it can be used by GitHub Actions. Remember to run these commands before committing any code changes:
 
 ```
-npm run build
-npm run pack
+task build
 ```
 
 ### 7. Commit

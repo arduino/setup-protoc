@@ -6,6 +6,11 @@ vars:
   SCHEMA_DRAFT_4_AJV_CLI_VERSION: 3.3.0
 
 tasks:
+  build:
+    desc: Build the project
+    deps:
+      - task: ts:build
+
   # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/check-npm-dependencies-task/Taskfile.yml
   general:prepare-deps:
     desc: Prepare project dependencies for license check
@@ -260,6 +265,15 @@ tasks:
         else
           echo "{{.RAW_PATH}}"
         fi
+
+  ts:build:
+    desc: Build the action's TypeScript code.
+    deps:
+      - task: npm:install-deps
+    cmds:
+      - npx tsc
+      - npx ncc build
+
   ts:lint:
     desc: Lint TypeScript code
     deps:

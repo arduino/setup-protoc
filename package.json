@@ -5,7 +5,6 @@
   "description": "Setup protoc action",
   "main": "lib/main.js",
   "scripts": {
-    "build": "tsc && ncc build",
     "format": "prettier --write **/*.ts",
     "format-check": "prettier --check **/*.ts",
     "test": "jest"
