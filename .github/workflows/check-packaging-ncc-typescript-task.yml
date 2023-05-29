@@ -7,7 +7,7 @@ env:
 on:
   push:
     paths:
-      - ".github/workflows/check-packaging-ncc-typescript-npm.ya?ml"
+      - ".github/workflows/check-packaging-ncc-typescript-task.ya?ml"
       - "lerna.json"
       - "package.json"
       - "package-lock.json"
@@ -16,7 +16,7 @@ on:
       - "**.[jt]sx?"
   pull_request:
     paths:
-      - ".github/workflows/check-packaging-ncc-typescript-npm.ya?ml"
+      - ".github/workflows/check-packaging-ncc-typescript-task.ya?ml"
       - "lerna.json"
       - "package.json"
       - "package-lock.json"
