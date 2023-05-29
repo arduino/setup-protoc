@@ -24,7 +24,7 @@ describe("filename tests", () => {
     ["protoc-3.20.2-osx-aarch_64.zip", "darwin", "arm64"],
     ["protoc-3.20.2-osx-x86_64.zip", "darwin", "x64"],
     ["protoc-3.20.2-win64.zip", "win32", "x64"],
-    ["protoc-3.20.2-win32.zip", "win32", "x32"]
+    ["protoc-3.20.2-win32.zip", "win32", "x32"],
   ];
   it(`Downloads all expected versions correctly`, () => {
     for (const [expected, plat, arch] of tests) {
@@ -35,7 +35,7 @@ describe("filename tests", () => {
 });
 
 describe("installer tests", () => {
-  beforeEach(async function() {
+  beforeEach(async function () {
     await io.rmRF(toolDir);
     await io.rmRF(tempDir);
     await io.mkdirP(toolDir);
