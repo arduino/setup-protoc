@@ -43,7 +43,7 @@
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-prettier": "^8.5.0",
-    "github-label-sync": "2.2.0",
+    "github-label-sync": "2.3.1",
     "jest": "^27.2.5",
     "jest-circus": "^27.2.5",
     "markdown-link-check": "^3.10.2",
