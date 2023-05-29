@@ -30,7 +30,7 @@
     "typed-rest-client": "^1.8.9"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.13",
+    "@types/jest": "^27.0.2",
     "@types/node": "^16.18.32",
     "@types/semver": "^6.0.0",
     "@typescript-eslint/eslint-plugin": "^5.59.7",
