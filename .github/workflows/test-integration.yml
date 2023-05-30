@@ -46,18 +46,16 @@ jobs:
           - windows-latest
           - macos-latest
         version:
-          - input: 3.x
-            expected: "libprotoc 3.20.3"
-          - input: 3.17.x
-            expected: "libprotoc 3.17.3"
-          - input: 3.17.2
-            expected: "libprotoc 3.17.2"
+          - input: v22.x
+            expected: "libprotoc 22.5"
+          - input: v22.3
+            expected: "libprotoc 22.3"
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Run action, using protoc minor version wildcard
+      - name: Run action, using protoc patch version wildcard
         uses: ./
         with:
           version: '${{ matrix.version.input }}'
@@ -80,7 +78,7 @@ jobs:
         continue-on-error: true
         uses: ./
         with:
-          version: 2.42.x
+          version: v10.x
 
       - name: Fail the job if the action run succeeded
         if: steps.setup-task.outcome == 'success'

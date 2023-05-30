@@ -65,10 +65,10 @@ if (!tempDirectory) {
 }
 const core = __importStar(__nccwpck_require__(2186));
 const tc = __importStar(__nccwpck_require__(7784));
-const exc = __importStar(__nccwpck_require__(1514));
-const io = __importStar(__nccwpck_require__(7436));
 const osPlat = os.platform();
 const osArch = os.arch();
+// This regex is slighty modified from https://semver.org/ to allow only MINOR.PATCH notation.
+const semverRegex = /^(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/gm;
 function getProtoc(version, includePreReleases, repoToken) {
     return __awaiter(this, void 0, void 0, function* () {
         // resolve the version number
@@ -86,27 +86,7 @@ function getProtoc(version, includePreReleases, repoToken) {
             process.stdout.write("Protoc cached under " + toolPath + os.EOL);
         }
         // add the bin folder to the PATH
-        toolPath = path.join(toolPath, "bin");
-        core.addPath(toolPath);
-        // make available Go-specific compiler to the PATH,
-        // this is needed because of https://github.com/actions/setup-go/issues/14
-        const goBin = yield io.which("go", false);
-        if (goBin) {
-            // Go is installed, add $GOPATH/bin to the $PATH because setup-go
-            // doesn't do it for us.
-            let stdOut = "";
-            const options = {
-                listeners: {
-                    stdout: (data) => {
-                        stdOut += data.toString();
-                    },
-                },
-            };
-            yield exc.exec("go", ["env", "GOPATH"], options);
-            const goPath = stdOut.trim();
-            core.debug("GOPATH: " + goPath);
-            core.addPath(path.join(goPath, "bin"));
-        }
+        core.addPath(path.join(toolPath, "bin"));
     });
 }
 exports.getProtoc = getProtoc;
@@ -174,6 +154,10 @@ function getFileName(version, osPlatf, osArc) {
     if (version.startsWith("v")) {
         version = version.slice(1, version.length);
     }
+    // in case is a rc release we add the `-`
+    if (version.includes("rc")) {
+        version = version.replace("rc", "rc-");
+    }
     // The name of the Windows package has a different naming pattern
     if (osPlatf == "win32") {
         const arch = osArc == "x64" ? "64" : "32";
@@ -228,7 +212,7 @@ function computeVersion(version, includePreReleases, repoToken) {
             version = version.slice(0, version.length - 2);
         }
         const allVersions = yield fetchVersions(includePreReleases, repoToken);
-        const validVersions = allVersions.filter((v) => semver.valid(v));
+        const validVersions = allVersions.filter((v) => v.match(semverRegex));
         const possibleVersions = validVersions.filter((v) => v.startsWith(version));
         const versionMap = new Map();
         possibleVersions.forEach((v) => versionMap.set(normalizeVersion(v), v));
@@ -245,40 +229,26 @@ function computeVersion(version, includePreReleases, repoToken) {
 }
 // Make partial versions semver compliant.
 function normalizeVersion(version) {
-    const preStrings = ["beta", "rc", "preview"];
+    const preStrings = ["rc"];
     const versionPart = version.split(".");
     // drop invalid
     if (versionPart[1] == null) {
         //append minor and patch version if not available
-        // e.g. 2 -> 2.0.0
+        // e.g. 23 -> 23.0.0
         return version.concat(".0.0");
     }
     else {
         // handle beta and rc
-        // e.g. 1.10beta1 -? 1.10.0-beta1, 1.10rc1 -> 1.10.0-rc1
+        // e.g. 23.0-rc1 -> 23.0.0-rc1
         if (preStrings.some((el) => versionPart[1].includes(el))) {
-            versionPart[1] = versionPart[1]
-                .replace("beta", ".0-beta")
-                .replace("rc", ".0-rc")
-                .replace("preview", ".0-preview");
+            versionPart[1] = versionPart[1].replace("-rc", ".0-rc");
             return versionPart.join(".");
         }
     }
     if (versionPart[2] == null) {
         //append patch version if not available
-        // e.g. 2.1 -> 2.1.0
+        // e.g. 23.1 -> 23.1.0
         return version.concat(".0");
-    }
-    else {
-        // handle beta and rc
-        // e.g. 1.8.5beta1 -> 1.8.5-beta1, 1.8.5rc1 -> 1.8.5-rc1
-        if (preStrings.some((el) => versionPart[2].includes(el))) {
-            versionPart[2] = versionPart[2]
-                .replace("beta", "-beta")
-                .replace("rc", "-rc")
-                .replace("preview", "-preview");
-            return versionPart.join(".");
-        }
     }
     return version;
 }
