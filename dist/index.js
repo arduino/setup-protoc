@@ -85,6 +85,9 @@ function getProtoc(version, includePreReleases, repoToken) {
             toolPath = yield downloadRelease(version);
             process.stdout.write("Protoc cached under " + toolPath + os.EOL);
         }
+        // expose outputs
+        core.setOutput("path", toolPath);
+        core.setOutput("version", targetVersion);
         // add the bin folder to the PATH
         core.addPath(path.join(toolPath, "bin"));
     });

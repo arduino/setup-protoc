@@ -11,6 +11,11 @@ inputs:
   repo-token:
     description: 'GitHub repo token to use to avoid rate limiter'
     default: ''
+outputs:
+  version:
+    description: 'Actual version of the protoc compiler environment that has been installed'
+  path:
+    description: 'Path to where the protoc compiler has been installed'
 runs:
   using: 'node16'
   main: 'dist/index.js'
