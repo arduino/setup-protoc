@@ -16,7 +16,7 @@ This action makes the `protoc` compiler available to Workflows.
 
 ## Upgrade to v2
 
-Added support **only** for the new protobuf tag naming convetion `MINOR.PATCH`.
+Added support **only** for the new protobuf tag naming convention `MINOR.PATCH`.
 
 ## Usage
 
