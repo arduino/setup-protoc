@@ -64,7 +64,7 @@ export async function getProtoc(
   }
 
   // expose outputs
-  core.setOutput("path", toolPath);
+  core.setOutput("path", toolPath + path.sep + "bin");
   core.setOutput("version", targetVersion);
 
   // add the bin folder to the PATH
