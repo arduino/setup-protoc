@@ -5,7 +5,7 @@ async function run() {
   try {
     const version = core.getInput("version");
     const includePreReleases = convertToBoolean(
-      core.getInput("include-pre-releases")
+      core.getInput("include-pre-releases"),
     );
     const repoToken = core.getInput("repo-token");
     await installer.getProtoc(version, includePreReleases, repoToken);

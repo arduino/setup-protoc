@@ -59,7 +59,7 @@ describe("installer tests", () => {
 
     if (IS_WINDOWS) {
       expect(fs.existsSync(path.join(protocDir, "bin", "protoc.exe"))).toBe(
-        true
+        true,
       );
     } else {
       expect(fs.existsSync(path.join(protocDir, "bin", "protoc"))).toBe(true);
@@ -112,11 +112,11 @@ describe("installer tests", () => {
         expect(fs.existsSync(`${protocDir}.complete`)).toBe(true);
         if (IS_WINDOWS) {
           expect(fs.existsSync(path.join(protocDir, "bin", "protoc.exe"))).toBe(
-            true
+            true,
           );
         } else {
           expect(fs.existsSync(path.join(protocDir, "bin", "protoc"))).toBe(
-            true
+            true,
           );
         }
       }, 100000);

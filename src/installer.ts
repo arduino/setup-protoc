@@ -40,13 +40,13 @@ interface IProtocRelease {
 export async function getProtoc(
   version: string,
   includePreReleases: boolean,
-  repoToken: string
+  repoToken: string,
 ) {
   // resolve the version number
   const targetVersion = await computeVersion(
     version,
     includePreReleases,
-    repoToken
+    repoToken,
   );
   if (targetVersion) {
     version = targetVersion;
@@ -77,7 +77,7 @@ async function downloadRelease(version: string): Promise<string> {
   const downloadUrl: string = util.format(
     "https://github.com/protocolbuffers/protobuf/releases/download/%s/%s",
     version,
-    fileName
+    fileName,
   );
   process.stdout.write("Downloading archive: " + downloadUrl + os.EOL);
 
@@ -88,7 +88,7 @@ async function downloadRelease(version: string): Promise<string> {
     if (err instanceof tc.HTTPError) {
       core.debug(err.message);
       throw new Error(
-        `Failed to download version ${version}: ${err.name}, ${err.message} - ${err.httpStatusCode}`
+        `Failed to download version ${version}: ${err.name}, ${err.message} - ${err.httpStatusCode}`,
       );
     }
     throw new Error(`Failed to download version ${version}: ${err}`);
@@ -141,7 +141,7 @@ function fileNameSuffix(osArc: string): string {
 export function getFileName(
   version: string,
   osPlatf: string,
-  osArc: string
+  osArc: string,
 ): string {
   // to compose the file name, strip the leading `v` char
   if (version.startsWith("v")) {
@@ -170,7 +170,7 @@ export function getFileName(
 // Retrieve a list of versions scraping tags from the Github API
 async function fetchVersions(
   includePreReleases: boolean,
-  repoToken: string
+  repoToken: string,
 ): Promise<string[]> {
   let rest: restm.RestClient;
   if (repoToken != "") {
@@ -185,7 +185,7 @@ async function fetchVersions(
   for (let pageNum = 1, morePages = true; morePages; pageNum++) {
     const p = await rest.get<IProtocRelease[]>(
       "https://api.github.com/repos/protocolbuffers/protobuf/releases?page=" +
-        pageNum
+        pageNum,
     );
     const nextPage: IProtocRelease[] = p.result || [];
     if (nextPage.length > 0) {
@@ -205,7 +205,7 @@ async function fetchVersions(
 async function computeVersion(
   version: string,
   includePreReleases: boolean,
-  repoToken: string
+  repoToken: string,
 ): Promise<string> {
   // strip leading `v` char (will be re-added later)
   if (version.startsWith("v")) {
@@ -269,7 +269,7 @@ function normalizeVersion(version: string): string {
 
 function includePrerelease(
   isPrerelease: boolean,
-  includePrereleases: boolean
+  includePrereleases: boolean,
 ): boolean {
   return includePrereleases || !isPrerelease;
 }

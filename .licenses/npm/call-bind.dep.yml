@@ -1,6 +1,6 @@
 ---
 name: call-bind
-version: 1.0.2
+version: 1.0.5
 type: npm
 summary: Robustly `.call.bind()` a function
 homepage: https://github.com/ljharb/call-bind#readme
