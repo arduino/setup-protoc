@@ -2,7 +2,7 @@ name: Check TypeScript Configuration
 
 env:
   # See: https://github.com/actions/setup-node/#readme
-  NODE_VERSION: 16.x
+  NODE_VERSION: 20.x
 
 # See: https://docs.github.com/en/actions/reference/events-that-trigger-workflows
 on:
@@ -35,10 +35,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
 

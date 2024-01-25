@@ -3,7 +3,7 @@ name: Sync Labels
 
 env:
   # See: https://github.com/actions/setup-node/#readme
-  NODE_VERSION: 16.x
+  NODE_VERSION: 20.x
   CONFIGURATIONS_FOLDER: .github/label-configuration-files
   CONFIGURATIONS_ARTIFACT: label-configuration-files
 
@@ -33,10 +33,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
 
@@ -115,7 +115,7 @@ jobs:
           echo "flag=--dry-run" >> $GITHUB_OUTPUT
 
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Download configuration files artifact
         uses: actions/download-artifact@v3
@@ -129,7 +129,7 @@ jobs:
           name: ${{ env.CONFIGURATIONS_ARTIFACT }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
 
