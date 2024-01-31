@@ -1,17 +1,17 @@
 ---
-name: get-intrinsic
-version: 1.2.2
+name: has-property-descriptors
+version: 1.0.1
 type: npm
-summary: Get and robustly cache all JS language-level intrinsics at first require
-  time
-homepage: https://github.com/ljharb/get-intrinsic#readme
+summary: Does the environment have full property descriptor support? Handles IE 8's
+  broken defineProperty/gOPD.
+homepage: https://github.com/inspect-js/has-property-descriptors#readme
 license: mit
 licenses:
 - sources: LICENSE
   text: |
     MIT License
 
-    Copyright (c) 2020 Jordan Harband
+    Copyright (c) 2022 Inspect JS
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal

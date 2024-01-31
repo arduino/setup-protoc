@@ -1,17 +1,16 @@
 ---
-name: get-intrinsic
-version: 1.2.2
+name: set-function-length
+version: 1.2.0
 type: npm
-summary: Get and robustly cache all JS language-level intrinsics at first require
-  time
-homepage: https://github.com/ljharb/get-intrinsic#readme
+summary: Set a function's length property
+homepage: https://github.com/ljharb/set-function-length#readme
 license: mit
 licenses:
 - sources: LICENSE
   text: |
     MIT License
 
-    Copyright (c) 2020 Jordan Harband
+    Copyright (c) Jordan Harband and contributors
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal

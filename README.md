@@ -14,7 +14,7 @@
 
 This action makes the `protoc` compiler available to Workflows.
 
-## Upgrade to v2
+## Upgrade from v1 to v2 or v3
 
 Added support **only** for the new protobuf tag naming convention `MINOR.PATCH`.
 
@@ -24,14 +24,14 @@ To get the latest stable version of `protoc` just add this step:
 
 ```yaml
 - name: Install Protoc
-  uses: arduino/setup-protoc@v2
+  uses: arduino/setup-protoc@v3
 ```
 
 If you want to pin a major or minor version you can use the `.x` wildcard:
 
 ```yaml
 - name: Install Protoc
-  uses: arduino/setup-protoc@v2
+  uses: arduino/setup-protoc@v3
   with:
     version: "23.x"
 ```
@@ -40,7 +40,7 @@ You can also require to include releases marked as `pre-release` in Github using
 
 ```yaml
 - name: Install Protoc
-  uses: arduino/setup-protoc@v2
+  uses: arduino/setup-protoc@v3
   with:
     version: "23.x"
     include-pre-releases: true
@@ -50,7 +50,7 @@ To pin the exact version:
 
 ```yaml
 - name: Install Protoc
-  uses: arduino/setup-protoc@v2
+  uses: arduino/setup-protoc@v3
   with:
     version: "23.2"
 ```
@@ -60,7 +60,7 @@ pass the default token with the `repo-token` variable:
 
 ```yaml
 - name: Install Protoc
-  uses: arduino/setup-protoc@v2
+  uses: arduino/setup-protoc@v3
   with:
     repo-token: ${{ secrets.GITHUB_TOKEN }}
 ```

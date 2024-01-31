@@ -17,7 +17,7 @@ outputs:
   path:
     description: 'Path to where the protoc compiler has been installed'
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'dist/index.js'
 branding:
   icon: 'box'
