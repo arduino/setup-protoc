@@ -147,6 +147,10 @@ tasks:
       AVA_SCHEMA_URL: https://json.schemastore.org/ava.json
       AVA_SCHEMA_PATH:
         sh: task utility:mktemp-file TEMPLATE="ava-schema-XXXXXXXXXX.json"
+      # Source: https://github.com/SchemaStore/schemastore/blob/master/src/schemas/json/base.json
+      BASE_SCHEMA_URL: https://json.schemastore.org/base.json
+      BASE_SCHEMA_PATH:
+        sh: task utility:mktemp-file TEMPLATE="base-schema-XXXXXXXXXX.json"
       # Source: https://github.com/SchemaStore/schemastore/blob/master/src/schemas/json/eslintrc.json
       ESLINTRC_SCHEMA_URL: https://json.schemastore.org/eslintrc.json
       ESLINTRC_SCHEMA_PATH:
@@ -184,6 +188,7 @@ tasks:
     cmds:
       - wget --quiet --output-document="{{.SCHEMA_PATH}}" {{.SCHEMA_URL}}
       - wget --quiet --output-document="{{.AVA_SCHEMA_PATH}}" {{.AVA_SCHEMA_URL}}
+      - wget --quiet --output-document="{{.BASE_SCHEMA_PATH}}" {{.BASE_SCHEMA_URL}}
       - wget --quiet --output-document="{{.ESLINTRC_SCHEMA_PATH}}" {{.ESLINTRC_SCHEMA_URL}}
       - wget --quiet --output-document="{{.JSCPD_SCHEMA_PATH}}" {{.JSCPD_SCHEMA_URL}}
       - wget --quiet --output-document="{{.NPM_BADGES_SCHEMA_PATH}}" {{.NPM_BADGES_SCHEMA_URL}}
@@ -197,6 +202,7 @@ tasks:
           --all-errors \
           -s "{{.SCHEMA_PATH}}" \
           -r "{{.AVA_SCHEMA_PATH}}" \
+          -r "{{.BASE_SCHEMA_PATH}}" \
           -r "{{.ESLINTRC_SCHEMA_PATH}}" \
           -r "{{.JSCPD_SCHEMA_PATH}}" \
           -r "{{.NPM_BADGES_SCHEMA_PATH}}" \
