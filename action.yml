@@ -3,8 +3,8 @@ description: 'Download protoc compiler and add it to the PATH'
 author: 'Arduino'
 inputs:
   version:
-    description: 'Version to use. Example: 23.2'
-    default: '23.x'
+    description: 'Version to use. Example: 26.2'
+    default: '26.x'
   include-pre-releases:
     description: 'Include github pre-releases in latest version calculation'
     default: 'false'
