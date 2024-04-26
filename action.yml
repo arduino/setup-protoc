@@ -1,5 +1,5 @@
-name: 'Setup protoc'
-description: 'Download protoc compiler and add it to the PATH'
+name: 'Setup protoc to env'
+description: 'Download protoc compiler and add it to the PATH and PROTOC'
 author: 'Arduino'
 inputs:
   version:

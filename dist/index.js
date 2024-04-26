@@ -88,6 +88,12 @@ function getProtoc(version, includePreReleases, repoToken) {
         // expose outputs
         core.setOutput("path", toolPath);
         core.setOutput("version", targetVersion);
+        if (process.platform === "win32") {
+            core.exportVariable("PROTOC", toolPath + "\\bin\\protoc.exe");
+        }
+        else {
+            core.exportVariable("PROTOC", toolPath + "/bin/protoc");
+        }
         // add the bin folder to the PATH
         core.addPath(path.join(toolPath, "bin"));
     });
@@ -174,7 +180,7 @@ function getFileName(version, osPlatf, osArc) {
 }
 exports.getFileName = getFileName;
 // Retrieve a list of versions scraping tags from the Github API
-function fetchVersions(includePreReleases, repoToken) {
+function fetchVersions(version, includePreReleases, repoToken) {
     return __awaiter(this, void 0, void 0, function* () {
         let rest;
         if (repoToken != "") {
@@ -186,17 +192,28 @@ function fetchVersions(includePreReleases, repoToken) {
             rest = new restm.RestClient("setup-protoc");
         }
         let tags = [];
-        for (let pageNum = 1, morePages = true; morePages; pageNum++) {
-            const p = yield rest.get("https://api.github.com/repos/protocolbuffers/protobuf/releases?page=" +
-                pageNum);
-            const nextPage = p.result || [];
-            if (nextPage.length > 0) {
-                tags = tags.concat(nextPage);
-            }
-            else {
-                morePages = false;
+
+        if (version == "24" || version == "24.4" || version == "25.2" || version == "25" || version == "26.0")
+        {
+            //use cached response
+            console.log("Using version " + version + " (cached info without using github api)");
+            return ["24.4","25.2","26.0"];
+        }
+        else
+        {
+            for (let pageNum = 1, morePages = true; morePages; pageNum++) {
+                const p = yield rest.get("https://api.github.com/repos/protocolbuffers/protobuf/releases?page=" +
+                    pageNum);
+                const nextPage = p.result || [];
+                if (nextPage.length > 0) {
+                    tags = tags.concat(nextPage);
+                }
+                else {
+                    morePages = false;
+                }
             }
         }
+
         return tags
             .filter((tag) => tag.tag_name.match(/v\d+\.[\w.]+/g))
             .filter((tag) => includePrerelease(tag.prerelease, includePreReleases))
@@ -214,7 +231,7 @@ function computeVersion(version, includePreReleases, repoToken) {
         if (version.endsWith(".x")) {
             version = version.slice(0, version.length - 2);
         }
-        const allVersions = yield fetchVersions(includePreReleases, repoToken);
+        const allVersions = yield fetchVersions(version, includePreReleases, repoToken);
         const validVersions = allVersions.filter((v) => v.match(semverRegex));
         const possibleVersions = validVersions.filter((v) => v.startsWith(version));
         const versionMap = new Map();
