@@ -2,7 +2,7 @@ name: Check Packaging
 
 env:
   # See: https://github.com/actions/setup-node/#readme
-  NODE_VERSION: 20.x
+  NODE_VERSION: 24.x
 
 on:
   push:
