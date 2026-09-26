@@ -81,7 +81,7 @@ jobs:
           version: v10.x
 
       - name: Fail the job if the action run succeeded
-        if: steps.setup-task.outcome == 'success'
+        if: steps.setup-protoc.outcome == 'success'
         run: |
           echo "::error::The action run was expected to fail, but passed!"
           exit 1

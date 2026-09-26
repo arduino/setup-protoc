@@ -10,7 +10,7 @@ inputs:
     default: 'false'
   repo-token:
     description: 'GitHub repo token to use to avoid rate limiter'
-    default: ''
+    default: ${{ github.token }}
 outputs:
   version:
     description: 'Actual version of the protoc compiler environment that has been installed'
